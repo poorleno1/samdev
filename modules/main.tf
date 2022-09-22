@@ -16,7 +16,7 @@ module "vnet" {
   resource_group_name   = module.resource_group.rg_name
   region                = var.region
   vnet_address_space    = var.vnet_address_space
-  subnet_names          = var.subnet_names
+  subnet_names          = var.subnet_name
   address_prefixes      = var.address_prefixes
   private_endpoint_name = "${var.storage_account_name}blobPEP01"
 }
