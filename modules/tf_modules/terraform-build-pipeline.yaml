@@ -1,0 +1,83 @@
+###############################################################################
+# Fill out all variables in <> with your own values.                          #
+###############################################################################
+
+# pipeline will not run automatically, as trigger is set to none
+trigger: none
+
+# uses default linux agent pool from Microsoft 
+# can be replaced with custom private agent pool
+pool:
+  vmImage: ubuntu-latest
+
+# From here it will receive the secret from the key vault
+# please configure accorind to the readme.md
+variables:
+- group: tfVars
+
+# Splits the workflow in different steps.
+# If you like to have multiple stages, you must always create a INIT step at each new stage before you can run a plan or an apply.
+stages:
+  - stage: Plan
+    jobs:
+    - job: 
+      steps:
+
+      # Receives the secret for the service connection from the key vault and stores it into the environment variable "TF_VAR_CLIENT_SECRET"
+      - task: Bash@3
+        displayName: 'Receive client secret'
+        inputs:
+          targetType: 'inline'
+          script: 'echo "##vso[task.setvariable variable=TF_VAR_CLIENT_SECRET]$(clientsecret)"'
+
+      # Installs terraform. It is recommended to specify a version and not use latest by default. Otherwise it could end up in unexpected behavior.
+      - task: ms-devlabs.custom-terraform-tasks.custom-terraform-installer-task.TerraformInstaller@0
+        inputs:
+          terraformVersion: '1.2.8'
+
+      # Initiates the terraform project storage account for backend configuration must exist.
+      - task: ms-devlabs.custom-terraform-tasks.custom-terraform-release-task.TerraformTaskV2@2
+        displayName: 'Terraform : Initialization'
+        inputs:
+          command: init
+          workingDirectory: '$(System.DefaultWorkingDirectory)/infra/terraform/modules/tf_azure_storage_account'
+          backendServiceArm: 'frdap-dt'
+          backendAzureRmResourceGroupName: 'd3alf2rg01'
+          backendAzureRmStorageAccountName: d3alf2tfstr # yes, here are no quotes
+          backendAzureRmContainerName: terraform # yes, here are non quotes
+          backendAzureRmKey: terraform.tfstate # yes here are no quotes
+      
+      # Runs the terraform validate command
+      - task: ms-devlabs.custom-terraform-tasks.custom-terraform-release-task.TerraformTaskV2@2
+        displayName: 'Terraform : Validation'
+        inputs:
+          command: validate
+          workingDirectory: '$(System.DefaultWorkingDirectory)/infra/terraform/modules/tf_azure_storage_account'
+
+
+      # Runs the plan, but it does not neccessarily have to run as you always have "plan" included in each "apply"
+      # - task: ms-devlabs.custom-terraform-tasks.custom-terraform-release-task.TerraformTaskV2@2
+      #   displayName: 'Terraform : Plan'
+      #   inputs:
+      #     command: plan
+      #     environmentServiceNameAzureRM: '<NAME OF SERVICE CONNECTION>'
+      #     providerAzureRmSubscriptionId: '<SUBSCRIPTION ID>'
+      
+      # Runs the terraform apply command.
+      - task: ms-devlabs.custom-terraform-tasks.custom-terraform-release-task.TerraformTaskV2@2
+        displayName: 'Terraform : Plan'
+        inputs:
+          command: plan
+          workingDirectory: '$(System.DefaultWorkingDirectory)/infra/terraform/modules/tf_azure_storage_account'
+          commandOptions: '-var-file="terraform.tfvars"'
+          environmentServiceNameAzureRM: 'frdap-dt'
+          providerAzureRmSubscriptionId: 'd6c81d59-1777-431e-998d-2cd3788cb0a4' #frdap-dt
+
+      - task: ms-devlabs.custom-terraform-tasks.custom-terraform-release-task.TerraformTaskV2@2
+        displayName: 'Terraform : Apply'
+        inputs:
+          command: apply
+          workingDirectory: '$(System.DefaultWorkingDirectory)/infra/terraform/modules/tf_azure_storage_account'
+          commandOptions: '-var-file="terraform.tfvars"'
+          environmentServiceNameAzureRM: 'frdap-dt'
+          providerAzureRmSubscriptionId: 'd6c81d59-1777-431e-998d-2cd3788cb0a4' #frdap-dt

@@ -1,0 +1,6 @@
+role,id
+Storage Account Key Operator Service Role,2ee77e9e-0cc4-4f78-bf83-978af29df1f3
+Storage Blob Data Owner,2ee77e9e-0cc4-4f78-bf83-978af29df1f3
+Storage Blob Data Contributor,2ee77e9e-0cc4-4f78-bf83-978af29df1f3
+Storage Account Contributor,2ee77e9e-0cc4-4f78-bf83-978af29df1f3
+Storage Blob Data Reader,2ee77e9e-0cc4-4f78-bf83-978af29df1f3
