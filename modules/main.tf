@@ -35,11 +35,11 @@ module "storage_account" {
   private_endpoint_name = "${var.storage_account_name}blobPEP01"
 }
 
-# module "key_vault" {
-#   source              = "./key_vault"
-#   resource_group_name = module.resource_group.rg_name
-#   region              = var.region
-#   key_vault_name      = var.key_vault_name
-#   secret_name         = "${var.storage_account_name}key1"
-#   secret_value        = module.storage_account.access_key1
-# }
+module "key_vault" {
+  source              = "./key_vault"
+  resource_group_name = module.resource_group.rg_name
+  region              = var.region
+  key_vault_name      = var.key_vault_name
+  secret_name         = "${var.storage_account_name}key1"
+  secret_value        = module.storage_account.access_key1
+}
