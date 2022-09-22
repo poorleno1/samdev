@@ -35,7 +35,19 @@ variable "Tagschange" {
 #   type = string
 # }
 
+variable "vnet_name" {
+  type = string
+}
+
 variable "subnet_name" {
+  type = string
+}
+
+variable "vnet_address_space" {
+  type = string
+}
+
+variable "address_prefixes" {
   type = string
 }
 
