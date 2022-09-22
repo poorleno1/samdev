@@ -38,6 +38,21 @@ resource "azurerm_key_vault_access_policy" "access_policy" {
   ]
 }
 
+
+resource "azurerm_key_vault_access_policy" "current_user" {
+  key_vault_id = azurerm_key_vault.key_vault.id
+  tenant_id    = data.azurerm_client_config.current.tenant_id
+  object_id    = data.azurerm_client_config.current.object_id
+  
+
+  secret_permissions = [
+    "Get", "List", "Set", "Delete","Purge"
+  ]
+
+}
+
+
+
 #
 # Secret for ECC Dataflow
 #
@@ -45,4 +60,7 @@ resource "azurerm_key_vault_secret" "secret" {
   name         = var.secret_name
   value        = var.secret_value
   key_vault_id = azurerm_key_vault.key_vault.id
+  depends_on = [
+    azurerm_key_vault_access_policy.current_user
+  ]
 }
