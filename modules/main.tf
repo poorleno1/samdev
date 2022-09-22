@@ -21,19 +21,19 @@ module "vnet" {
   private_endpoint_name = "${var.storage_account_name}blobPEP01"
 }
 
-# module "storage_account" {
-#   source               = "./storage_account"
-#   region               = var.region
-#   storage_account_name = var.storage_account_name
-#   resource_group_name  = module.resource_group.rg_name
-#   tier                 = var.tier
-#   replication_type     = var.replication_type
-#   network_rules        = var.network_rules
-#   Tagschange           = var.Tagschange
-#   dns_zone_id          = var.dns_zone_id
-#   subnet_id            = "${var.vnet_id}/subnets/${var.subnet_name}"
-#   private_endpoint_name = "${var.storage_account_name}blobPEP01"
-# }
+module "storage_account" {
+  source               = "./storage_account"
+  region               = var.region
+  storage_account_name = var.storage_account_name
+  resource_group_name  = module.resource_group.rg_name
+  tier                 = var.tier
+  replication_type     = var.replication_type
+  network_rules        = var.network_rules
+  Tagschange           = var.Tagschange
+  #dns_zone_id          = var.dns_zone_id
+  subnet_id            = module.vnet.subnet_id
+  private_endpoint_name = "${var.storage_account_name}blobPEP01"
+}
 
 # module "key_vault" {
 #   source              = "./key_vault"

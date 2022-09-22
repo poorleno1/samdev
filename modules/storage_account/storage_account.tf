@@ -75,7 +75,7 @@ resource "azurerm_storage_data_lake_gen2_path" "adls_path_folder2" {
 resource "azurerm_role_assignment" "role_assignment" {
   for_each             = { for roles in local.role_assignments : roles.role => roles }
   scope                = azurerm_storage_account.sa.id
-  principal_id         = each.value.id
+  principal_id         = each.value.object_id
   role_definition_name = each.value.role
   depends_on = [
     azurerm_storage_account.sa
