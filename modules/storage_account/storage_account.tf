@@ -54,6 +54,12 @@ resource "azurerm_storage_data_lake_gen2_filesystem" "adls_filesystem" {
   depends_on = [
     azurerm_role_assignment.role_assignment,azurerm_role_assignment.current_user_data_owner
   ]
+
+  lifecycle {
+    ignore_changes = [
+      ace
+    ]
+  }
 }
 
 resource "azurerm_storage_data_lake_gen2_path" "adls_path_folder1" {
