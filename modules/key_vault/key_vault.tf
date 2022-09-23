@@ -39,11 +39,18 @@ resource "azurerm_key_vault_access_policy" "access_policy" {
 }
 
 
+#Fetch current user info using the AZ cli
+data "external" "thisAccount" {
+  program = ["az","ad","signed-in-user","show","--query","{displayName: displayName,objectId: objectId,objectType: objectType}"]
+}
+
+
+
 resource "azurerm_key_vault_access_policy" "current_user" {
   key_vault_id = azurerm_key_vault.key_vault.id
   tenant_id    = data.azurerm_client_config.current.tenant_id
-  object_id    = data.azurerm_client_config.current.object_id
-  
+  object_id    = data.external.thisAccount.result.objectId
+
 
   secret_permissions = [
     "Get", "List", "Set", "Delete","Purge"
