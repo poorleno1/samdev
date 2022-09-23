@@ -23,9 +23,19 @@ resource "azurerm_storage_account" "sa" {
       bypass                     = network_rules.value.bypass
     }
   }
-  
-
 }
+
+data "external" "thisAccount" {
+  program = ["az","ad","signed-in-user","show","--query","{displayName: displayName,objectId: objectId,objectType: objectType}"]
+}
+
+resource "azurerm_role_assignment" "current_user_data_owner" {
+  scope                = azurerm_storage_account.sa.id
+  role_definition_name = "Storage Blob Data Owner"
+  principal_id         = data.external.thisAccount.result.objectId
+}
+
+
 
 resource "azurerm_storage_data_lake_gen2_filesystem" "adls_filesystem" {
   for_each           = { for containers in local.data_lake_containers : containers.container => containers }
@@ -42,7 +52,7 @@ resource "azurerm_storage_data_lake_gen2_filesystem" "adls_filesystem" {
     }
   }
   depends_on = [
-    azurerm_role_assignment.role_assignment
+    azurerm_role_assignment.role_assignment,azurerm_role_assignment.current_user_data_owner
   ]
 }
 
