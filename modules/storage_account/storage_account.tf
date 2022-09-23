@@ -25,15 +25,21 @@ resource "azurerm_storage_account" "sa" {
   }
 }
 
-data "external" "thisAccount" {
-  program = ["az","ad","signed-in-user","show","--query","{displayName: displayName,objectId: objectId,objectType: objectType}"]
-}
 
-resource "azurerm_role_assignment" "current_user_data_owner" {
-  scope                = azurerm_storage_account.sa.id
-  role_definition_name = "Storage Blob Data Owner"
-  principal_id         = data.external.thisAccount.result.objectId
-}
+# data "external" "thisAccount" {
+#   program = ["az","ad","signed-in-user","show","--query","{displayName: displayName,objectId: objectId,objectType: objectType}"]
+# }
+
+
+// data "azurerm_client_config" "example" {}
+
+// resource "azurerm_role_assignment" "current_user_data_owner" {
+//   scope                = azurerm_storage_account.sa.id
+//   role_definition_name = "Storage Blob Data Owner"
+//   principal_id = data.azurerm_client_config.example.object_id
+//   #principal_id = data.azurerm_client_config.example.object_id
+//   #principal_id         = data.external.thisAccount.result.objectId
+// }
 
 
 
@@ -51,9 +57,10 @@ resource "azurerm_storage_data_lake_gen2_filesystem" "adls_filesystem" {
       permissions = ace.value.ace_permissions
     }
   }
-  depends_on = [
-    azurerm_role_assignment.role_assignment,azurerm_role_assignment.current_user_data_owner
-  ]
+  // depends_on = [
+  //   azurerm_role_assignment.role_assignments
+  //   #,azurerm_role_assignment.current_user_data_owner
+  // ]
 
   lifecycle {
     ignore_changes = [

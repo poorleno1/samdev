@@ -1,0 +1,17 @@
+container,folder1,folder2,application_id
+belgiumdev,inbound,outbound,4f73470e-1e3d-4c00-99c0-bcbd474c22ad
+aavdev,inbound,outbound,6c8267a0-c852-4e6e-81e8-7eb449249bd4
+aavgldev,inbound,outbound,6c8267a0-c852-4e6e-81e8-7eb449249bd4
+bulgariadev,inbound,outbound,97ae9d72-6876-482f-b947-70eb7c5bd0b8
+czechiadev,inbound,outbound,9698d81e-db3a-4cb3-8f38-962fe0f3b4de
+greecedev,inbound,outbound,17ca3b6a-ebde-49fd-b1f8-b69347f08407
+hungarydev,inbound,outbound,356a4266-5ef8-450f-a144-e5fa59f98000
+polanddev,inbound,outbound,734bd9ec-d99d-4ccf-8618-b15f465c2a6e
+romaniadev,inbound,outbound,23e8cb06-f260-40db-bffd-2873a1718a64
+slovakiadev,inbound,outbound,52454c5a-1d10-4d94-9b8e-edd55ad692ef
+turkeydev,inbound,outbound,68636930-3884-41b4-bdc4-235720b2fc0a
+spainlifedev,inbound,outbound,46109174-55d4-4ca5-9a21-73d48bf26d3d
+markitedmdev,inbound,outbound,435ceb27-6061-48fb-921c-d098dfe793a4
+japandev,inbound,outbound,442d01fd-19bd-47cd-afff-84f584ab1d32
+fusiongldev,inbound,outbound,442d01fd-19bd-47cd-afff-84f584ab1d32
+solarisdev,inbound,outbound,6bb0be24-4e69-4f11-bfa6-2fb04e1d0713
