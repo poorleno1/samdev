@@ -9,7 +9,7 @@ terraform {
     # Choose a container that is relevant for deployment: standalone or shared-farms
     container_name       = "terraform"
     # Unique files name in container
-    key                  = "mihir.tfstate"
+    key                  = "sam.tfstate"
     resource_group_name  = "tfstate"
   }
 }
